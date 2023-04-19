@@ -1,0 +1,18 @@
+/**
+ * @defgroup    boards_arty_a735t Arty-A7-35T
+ * @ingroup     boards
+ * @brief       Support for the Arty-A7-35T board.
+ *
+ * ### General information
+ *
+ * Some general information about the board
+ *
+ * ### Pinout
+ *
+ * A detailed description of the board pinout (if available)
+ *
+ * ### Flash the board
+ *
+ * Some notes about how to flash the board
+ *
+ */
