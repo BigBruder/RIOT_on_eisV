@@ -28,7 +28,7 @@
 #include "assert.h"
 #include "cpu.h"
 #include "plic.h"
-#include "vendor/plic.h"
+#include "architecture.h"
 
 /* Local macros to calculate register offsets */
 #ifndef _REG32
@@ -43,7 +43,7 @@ static plic_isr_cb_t _ext_isrs[PLIC_NUM_INTERRUPTS];
 
 static inline volatile uint32_t *_get_claim_complete_addr(void)
 {
-    uint32_t hart_id = read_csr(mhartid);
+    uword_t hart_id = read_csr(mhartid);
 
     /* Construct the claim address */
     return &PLIC_REG(PLIC_CLAIM_OFFSET +
@@ -52,7 +52,7 @@ static inline volatile uint32_t *_get_claim_complete_addr(void)
 
 static inline volatile uint32_t *_get_threshold_addr(void)
 {
-    uint32_t hart_id = read_csr(mhartid);
+    uword_t hart_id = read_csr(mhartid);
 
     /* Construct the claim address */
     return &PLIC_REG(PLIC_THRESHOLD_OFFSET +
@@ -61,7 +61,7 @@ static inline volatile uint32_t *_get_threshold_addr(void)
 
 static inline volatile uint32_t *_get_irq_reg(unsigned irq)
 {
-    uint32_t hart_id = read_csr(mhartid);
+    uword_t hart_id = read_csr(mhartid);
 
     return &PLIC_REG(PLIC_ENABLE_OFFSET +
                      (hart_id << PLIC_ENABLE_SHIFT_PER_TARGET)) +
@@ -72,14 +72,14 @@ void plic_enable_interrupt(unsigned irq)
 {
     volatile uint32_t *irq_reg = _get_irq_reg(irq);
 
-    *irq_reg |= 1 << (irq & 0x1f);
+    __atomic_fetch_or(irq_reg, 1 << (irq & 0x1f), __ATOMIC_RELAXED);
 }
 
 void plic_disable_interrupt(unsigned irq)
 {
     volatile uint32_t *irq_reg = _get_irq_reg(irq);
 
-    *irq_reg &= ~(1 << (irq & 0x1f));
+    __atomic_fetch_and(irq_reg, ~(1 << (irq & 0x1f)), __ATOMIC_RELAXED);
 }
 
 void plic_set_threshold(unsigned threshold)

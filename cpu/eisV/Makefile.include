@@ -1,0 +1,8 @@
+CFLAGS += -Wno-pedantic
+
+RAM_START_ADDR ?= 0x01000000
+RAM_LEN ?= 16M
+ROM_START_ADDR ?= 0x00000000
+ROM_LEN ?= 16M
+
+include $(RIOTCPU)/riscv_common/Makefile.include
