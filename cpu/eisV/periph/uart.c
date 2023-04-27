@@ -23,7 +23,7 @@
 #include <inttypes.h>
 
 #include "irq.h"
-#include "cpu.h"
+#include "cpu_common.h"
 #include "periph/uart.h"
 #include "plic.h"
 #include "vendor/riscv_csr.h"

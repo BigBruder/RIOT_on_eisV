@@ -22,7 +22,7 @@
 #include <inttypes.h>
 
 #include "periph_cpu_common.h"
-#include "cpu.h"
+#include "cpu_common.h"
 
 #ifdef __cplusplus
 extern "C" {

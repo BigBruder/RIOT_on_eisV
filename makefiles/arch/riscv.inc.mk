@@ -17,6 +17,7 @@ _TRIPLES_TO_TEST := \
     riscv32-none-elf \
     riscv-none-elf \
     riscv32-unknown-elf \
+    riscv32-corev-elf\
     riscv-unknown-elf \
     riscv64-none-elf \
     riscv64-unknown-elf

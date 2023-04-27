@@ -17,7 +17,7 @@
  */
 
 #include "clk.h"
-#include "cpu.h"
+#include "cpu_common.h"
 #include "periph/init.h"
 
 #include "stdio_uart.h"
