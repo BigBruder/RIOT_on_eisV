@@ -17,7 +17,7 @@
  * @}
  */
 
-#include "cpu.h"
+#include "cpu_common.h"
 #include "cpu_conf_common.h"
 #include "periph_cpu_common.h"
 

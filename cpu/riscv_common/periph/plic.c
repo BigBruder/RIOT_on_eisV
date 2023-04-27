@@ -26,7 +26,7 @@
 #include "vendor/riscv_csr.h"
 
 #include "assert.h"
-#include "cpu.h"
+#include "cpu_common.h"
 #include "plic.h"
 #include "vendor/plic.h"
 

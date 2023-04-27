@@ -21,7 +21,7 @@
 
 #include "architecture.h"
 #include "assert.h"
-#include "cpu.h"
+#include "cpu_common.h"
 #include "irq.h"
 #include "kernel_defines.h"
 #include "mutex.h"

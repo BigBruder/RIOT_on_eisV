@@ -35,7 +35,7 @@
 #include <sys/unistd.h>
 #include <stdint.h>
 
-#include "cpu.h"
+#include "cpu_common.h"
 #include "board.h"
 #include "sched.h"
 #include "thread.h"

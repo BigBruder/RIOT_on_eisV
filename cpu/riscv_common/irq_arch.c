@@ -22,7 +22,7 @@
 #include <inttypes.h>
 
 #include "macros/xtstr.h"
-#include "cpu.h"
+#include "cpu_common.h"
 #include "context_frame.h"
 #include "irq.h"
 #include "irq_arch.h"
