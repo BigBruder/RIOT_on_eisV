@@ -649,3 +649,26 @@ clock_t _times_r(struct _reent *ptr, struct tms *ptms)
 
     return (-1);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
