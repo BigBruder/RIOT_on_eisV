@@ -21,6 +21,7 @@
 #include <sys/timeb.h>
 #include <sys/times.h>
 #include <sys/utime.h>
+#include <sys/time.h>
 #include <newlib.h>
 #include <unistd.h>
 #include <errno.h>
@@ -112,7 +113,7 @@ int _execve(const char *name, char *const argv[], char *const env[])
 void _exit(int exit_status)
 {
   *(volatile int *)EXIT_REG = exit_status;
-  asm volatile("wfi");
+  __asm__ volatile("wfi");
   /* _exit should not return */
   while (1) {};
 }
@@ -276,7 +277,7 @@ int _brk(void *addr)
 void *_sbrk(ptrdiff_t incr)
 {
   char *old_brk = brk;
-  register long sp asm("sp");
+  register long sp __asm__("sp");
 
   char *new_brk = brk += incr;
   if (new_brk < (char *) sp && new_brk < __heap_end)

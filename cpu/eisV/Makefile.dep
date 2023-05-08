@@ -1,4 +1,4 @@
-USEMODULE += periph
+#USEMODULE += periph
 
 FEATURES_REQUIRED += periph_plic
 
@@ -20,7 +20,7 @@ ifneq (,$(filter newlib,$(USEMODULE)))
 endif
 
 # Tell the build system that the CPU depends on the risc-v common files:
-USEMODULE += riscv_common
+#USEMODULE += riscv_common
 
 # include common periph code
 USEMODULE += riscv_common_periph

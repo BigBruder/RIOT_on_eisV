@@ -272,6 +272,7 @@ SECTIONS
   .stack (__heap_start)    : ALIGN(16) /* this is a requirement of the ABI(?) */
   {
    PROVIDE(__stack_start = __heap_start);
+   PROVIDE( _sp = __stack_start ); /* Probably FIXME (2023-05-08 Moritz) */
    . = __heap_end;
    PROVIDE(__stack_end = .);
   } >ram
