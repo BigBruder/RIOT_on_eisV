@@ -32,7 +32,7 @@ TARGET_ARCH_RISCV ?= \
 TARGET_ARCH ?= $(TARGET_ARCH_RISCV)
 
 # define build specific options
-CFLAGS_CPU   = -march=rv32imc -mabi=ilp32
+CFLAGS_CPU   = -march=rv32im -mabi=ilp32
 ifeq ($(TOOLCHAIN),llvm)
   # Always use riscv32-none-elf as target triple for clang, as some
   # autodetected gcc target triples are incompatible with clang
