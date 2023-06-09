@@ -40,6 +40,7 @@ extern int errno;
 #define EXIT_REG 0xffffffcc
 
 #define STDOUT_FILENO 1
+#define STDERR_FILENO 2
 
 /* It turns out that older newlib versions use different symbol names which goes
  * against newlib recommendations. Anyway this is fixed in later version.
@@ -169,7 +170,7 @@ int _gettimeofday(struct timeval *tp, void *tzp)
 
 int _isatty(int file)
 {
-  return (file == STDOUT_FILENO);
+  return ((file == STDOUT_FILENO) || (file == STDERR_FILENO));
 }
 
 int _kill(int pid, int sig)
@@ -251,7 +252,7 @@ int _wait(int *status)
 ssize_t _write(int file, const void *ptr, size_t len)
 {
   const char *cptr = (char *)ptr;
-  if (file != STDOUT_FILENO)
+  if (!((file == STDOUT_FILENO) || (file == STDERR_FILENO)))
     {
       errno = ENOSYS;
       return -1;
