@@ -15,7 +15,7 @@ endif
 # Select a C library
 FEATURES_REQUIRED_ANY += newlib|picolibc
 ifneq (,$(filter newlib,$(USEMODULE)))
-  DEFAULT_MODULE += newlib_nano
+  DEFAULT_MODULE += newlib
   USEMODULE += newlib_syscalls_default
 endif
 
