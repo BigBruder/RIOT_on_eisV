@@ -7,6 +7,9 @@ ROM_LEN ?= 16M
 
 #include $(RIOTCPU)/riscv_common/Makefile.include
 ##################################################################
+#Header files do not need to be defined in include/, 
+#but if defined somewhere else then they must be added to the include path. 
+#In Makefile.include: INCLUDES += -I<some>/<directory>/<path>
 #INCLUDES += -I$(RIOTCPU)/eisV/include
 
 TOOLCHAINS_SUPPORTED = gnu llvm
