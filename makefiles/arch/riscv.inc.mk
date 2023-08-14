@@ -47,14 +47,15 @@ CFLAGS_LINK  = -ffunction-sections -fdata-sections
 CFLAGS_DBG  ?= -g3
 CFLAGS_OPT  ?= -Os
 
-LINKFLAGS += -L$(RIOTCPU)/$(CPU)/ldscripts -L$(RIOTCPU)/riscv_common/ldscripts
+LINKFLAGS += -L$(RIOTCPU)/$(CPU)/ldscripts
 LINKER_SCRIPT ?= $(CPU_MODEL).ld
 LINKFLAGS += -T$(LINKER_SCRIPT)
 
 CFLAGS += $(CFLAGS_CPU) $(CFLAGS_DBG) $(CFLAGS_OPT) $(CFLAGS_LINK)
 ASFLAGS += $(CFLAGS_CPU) $(CFLAGS_DBG)
 # export linker flags
-LINKFLAGS += $(CFLAGS_CPU) $(CFLAGS_LINK) $(CFLAGS_DBG) $(CFLAGS_OPT) -nostartfiles -Wl,--gc-sections -static -lgcc
+LINKFLAGS += $(CFLAGS_CPU) $(CFLAGS_LINK) $(CFLAGS_DBG) $(CFLAGS_OPT) -v -nostartfiles -Wl,--gc-sections -static -lgcc
+#LINKFLAGS += $(CFLAGS_CPU) $(CFLAGS_LINK) $(CFLAGS_DBG) $(CFLAGS_OPT) -v -nostartfiles -static
 
 # Platform triple as used by Rust
 RUST_TARGET = riscv32imac-unknown-none-elf
