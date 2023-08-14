@@ -1,0 +1,31 @@
+#USEMODULE += periph
+
+FEATURES_REQUIRED += periph_plic
+
+ifneq (,$(filter periph_rtc,$(USEMODULE)))
+  FEATURES_REQUIRED += periph_rtt
+endif
+
+ifneq (,$(filter periph_timer,$(USEMODULE)))
+  FEATURES_REQUIRED += periph_coretimer
+endif
+
+#include $(RIOTCPU)/riscv_common/Makefile.dep
+###################################################
+# Select a C library
+FEATURES_REQUIRED_ANY += newlib|picolibc
+ifneq (,$(filter newlib,$(USEMODULE)))
+  DEFAULT_MODULE += newlib
+  USEMODULE += newlib_syscalls_default
+endif
+
+# Tell the build system that the CPU depends on the risc-v common files:
+#USEMODULE += riscv_common
+#USEMODULE += eisV
+
+# include common periph code
+#USEMODULE += riscv_common_periph
+USEMODULE += eisV_periph
+
+# Make calls to malloc and friends thread-safe
+USEMODULE += malloc_thread_safe
