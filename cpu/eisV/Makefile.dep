@@ -1,4 +1,4 @@
-USEMODULE += periph
+#USEMODULE += periph
 
 FEATURES_REQUIRED += periph_plic
 
@@ -21,11 +21,11 @@ endif
 
 # Tell the build system that the CPU depends on the risc-v common files:
 #USEMODULE += riscv_common
-USEMODULE += riscv_common
+#USEMODULE += eisV
 
 # include common periph code
 #USEMODULE += riscv_common_periph
 USEMODULE += eisV_periph
 
-# Make calls to malloc and friends thread-safe
+# Make calls to malloc and friends thread-safe in driver/
 USEMODULE += malloc_thread_safe

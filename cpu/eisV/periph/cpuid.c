@@ -21,7 +21,7 @@
 #include <string.h>
 
 #include "periph/cpuid.h"
-#include "cpu.h"
+#include "cpu_common.h"
 #include "vendor/riscv_csr.h"
 #include "vendor/platform.h"
 
