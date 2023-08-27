@@ -37,6 +37,8 @@
 #include "periph/timer.h"
 #include "vendor/riscv_csr.h"
 
+#include "vendor/platform.h"
+
 #ifndef CLINT_BASE_ADDR
 #error CLINT_BASE_ADDR must be defined to use the CLINT as timer
 #endif

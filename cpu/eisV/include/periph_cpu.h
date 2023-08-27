@@ -23,6 +23,8 @@
 
 #include "periph_cpu_common.h"
 #include "cpu_common.h"
+#include "cpu.h"
+#include "vendor/platform.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -122,6 +124,8 @@ typedef enum {
  */
 typedef struct {
     uint32_t addr;              /**< device base address */
+    gpio_t scl;                 /**< SCL pin */
+    gpio_t sda;                 /**< SDA pin */
     i2c_speed_t speed;          /**< I2C speed */
 } i2c_conf_t;
 

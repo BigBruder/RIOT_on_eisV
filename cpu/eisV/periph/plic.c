@@ -29,6 +29,7 @@
 #include "cpu_common.h"
 #include "plic.h"
 #include "vendor/plic.h"
+#include "vendor/platform.h"
 
 
 

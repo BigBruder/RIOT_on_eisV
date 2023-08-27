@@ -33,18 +33,18 @@ extern "C" {
  * @brief Base address of the CLINT
  */
 #define CLINT_BASE_ADDR     (0x40000000L)
-#define CLINT_MTIMECMP      (0x4000)
-#define CLINT_MTIME         (0xBFF8)
+//#define CLINT_MTIMECMP      (0x4000)
+//#define CLINT_MTIME         (0xBFF8)
 
-#define RTC_FREQ (50000000UL)
+//#define RTC_FREQ (50000000UL)
 /**
  * @brief Base address of the PLIC peripheral
  */
-#define PLIC_BASE_ADDR      (0x50000000L)
-#define PLIC_CTRL_ADDR      (0x50000000L)
+//#define PLIC_BASE_ADDR      (0x50000000L)
+//#define PLIC_CTRL_ADDR      (0x50000000L)
 
-#define INT_UART0_BASE      (2)
-#define PLIC_NUM_INTERRUPTS      (32)
+//#define INT_UART0_BASE      (2)
+//#define PLIC_NUM_INTERRUPTS      (32)
 #ifdef __cplusplus
 }
 #endif
