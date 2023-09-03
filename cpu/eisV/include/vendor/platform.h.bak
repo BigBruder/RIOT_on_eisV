@@ -109,7 +109,9 @@
 #define AON_REG(offset) 		_REG32(AON_CTRL_ADDR, offset)
 #define CLINT_REG(offset) 		_REG32(CLINT_CTRL_ADDR, offset)
 #define GPIO_REG(offset) 		_REG32(GPIO_CTRL_ADDR, offset)
+//--------
 #define I2C0_REG(offset) 		_REG32(I2C0_CTRL_ADDR, offset)
+//---------
 #define OTP_REG(offset)  		_REG32(OTP_CTRL_ADDR, offset)
 #define PLIC_REG(offset) 		_REG32(PLIC_CTRL_ADDR, offset)
 #define PRCI_REG(offset) 		_REG32(PRCI_CTRL_ADDR, offset)
