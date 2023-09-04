@@ -7,7 +7,7 @@
  */
 
 /**
- * @ingroup     eisv
+ * @ingroup     cpu_fe310
  * @ingroup     drivers_periph_i2c
  * @{
  *

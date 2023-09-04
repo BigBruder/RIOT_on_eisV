@@ -8,7 +8,7 @@
 //#include "vendor/aon.h"
 #include "vendor/clint.h"
 #include "vendor/gpio.h"
-#include "vendor/i2c.h"
+#include "vendor/i2c_eisv.h"
 //#include "vendor/otp.h"
 #include "vendor/plic.h"
 //#include "vendor/prci.h"

@@ -23,10 +23,10 @@
 #define _EISV_I2C_H
 
 /* I2C memory map */
-#define I2C0_CTRL_ADDR 			(0xFFFFFFD0) //adapted to eisv i2c_master
+// #define I2C0_CTRL_ADDR 			(0xFFFFFFD0) //adapted to eisv i2c_master
 
 // Helper functions
-#define _REG32(p, i) 			(*(volatile uint32_t *) ((p) + (i)))
+// #define _REG32(p, i) 			(*(volatile uint32_t *) ((p) + (i)))
 //#define I2C0_REG(offset) 		_REG32(I2C0_CTRL_ADDR, offset)
 
 

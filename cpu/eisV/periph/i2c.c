@@ -11,7 +11,7 @@
  * @ingroup     drivers_periph_i2c
  * @{
  *
- * @file        i2c_eisv.c
+ * @file        i2c.c
  * @brief       Low-level I2C driver implementation
  *
  * @author      Jingwei Li <jingwei.li@tu-braunschweig.de>
@@ -37,19 +37,26 @@
 #define ENABLE_DEBUG 0
 #include "debug.h"
 
-#define I2C_BUSY_TIMEOUT    (0xffff)
-static const uint16_t _fe310_i2c_speed[2] = { 100U, 400U };
+#define I2C_BUSY_TIMEOUT    99 //(0xffff)
+//static const uint16_t _fe310_i2c_speed[2] = { 100U, 400U };
 
 static inline int _wait_busy(i2c_t dev, uint32_t max_timeout_counter);
-static inline int _start(i2c_t dev, uint16_t address);
+static inline int _start(i2c_t dev, uint16_t address); //address - slave addr. with read 1 or write 0
 static inline int _read(i2c_t dev, uint8_t *data, int length, uint8_t stop);
 static inline int _write(i2c_t dev, const uint8_t *data, int length,
                          uint8_t stop);
-
 /**
  * @brief   Initialized bus locks
  */
 static mutex_t locks[I2C_NUMOF];
+
+static inline int crl_reg(i2c_t dev)
+{
+    uint8_t CRL_reg = _REG32(i2c_config[dev].addr, I2C_CONTROL);
+	printf("0x%X\n",CRL_reg);
+    return 0;
+} 
+
 
 void i2c_init(i2c_t dev)
 {
@@ -65,17 +72,22 @@ void i2c_init(i2c_t dev)
     GPIO_REG(GPIO_IOF_EN) |=
         ((1 << i2c_config[dev].scl) | (1 << i2c_config[dev].sda));
 
+    crl_reg(dev);
+    /* set I2C_TIMER to 99 */
+    _REG32(i2c_config[dev].addr, I2C_TIMER) = 99;
+    //_REG32(i2c_config[dev].addr, I2C_CONTROL) = 0b11000000;
 /*  This operation clears (sets to 0) the bits in the register 
     corresponding to I2C_CONTROL_IE and I2C_CONTROL_EN, 
     while leaving other bits unchanged. */
     _REG32(i2c_config[dev].addr,
            I2C_CONTROL) &= ~(I2C_CONTROL_I2CIE | I2C_CONTROL_I2CE);
-
+    crl_reg(dev);
     /* Compute prescale: presc = (CORE_CLOCK / (5 * I2C_SPEED)) - 1 */
+/* 
     uint16_t presc =
         ((uint16_t)(coreclk() / 1000) /
          (5 * _fe310_i2c_speed[i2c_config[dev].speed])) - 1;
-/* 
+
     DEBUG("[i2c] init: computed prescale: %i (0x%02X|0x%02X)\n", presc,
           (presc >> 8), (presc & 0xFF));
 
@@ -86,8 +98,8 @@ void i2c_init(i2c_t dev)
           (uint8_t)(_REG32(i2c_config[dev].addr, I2C_PRESCALE_HI) & 0xFF),
           (uint8_t)(_REG32(i2c_config[dev].addr, I2C_PRESCALE_LO) & 0xFF));
  */
-    _REG32(i2c_config[dev].addr, I2C_CONTROL) = I2C_CONTROL_I2CE;
-
+    _REG32(i2c_config[dev].addr, I2C_CONTROL) &= (I2C_CONTROL_I2CIE | I2C_CONTROL_I2CE);
+    crl_reg(dev);
 
     DEBUG("[i2c] init: control reg 0x%08X)\n",
           (unsigned)_REG32(i2c_config[dev].addr, I2C_CONTROL));
@@ -108,7 +120,7 @@ void i2c_release(i2c_t dev)
 }
 
 int i2c_read_bytes(i2c_t dev, uint16_t address, void *data, size_t length,
-                   uint8_t flags)
+                   uint8_t flags) //address - slave addr. 7bit
 {
     assert(length > 0);
     assert(dev < I2C_NUMOF);
@@ -148,7 +160,7 @@ int i2c_read_bytes(i2c_t dev, uint16_t address, void *data, size_t length,
 
 int i2c_write_bytes(i2c_t dev, uint16_t address, const void *data,
                     size_t length,
-                    uint8_t flags)
+                    uint8_t flags) //address - slave addr. 7bit
 {
     assert(dev < I2C_NUMOF);
 
@@ -188,7 +200,9 @@ static inline int _wait_busy(i2c_t dev, uint32_t max_timeout_counter)
 
     DEBUG("[i2c] wait for transfer\n");
 //    while (_REG32(i2c_config[dev].addr, I2C_STATUS) & I2C_STATUS_TIP) {
-    while (!(_REG32(i2c_config[dev].addr, I2C_CONTROL) & I2C_CONTROL_DONE)) {
+    while (!(_REG32(i2c_config[dev].addr, I2C_CONTROL) & I2C_CONTROL_DONE))
+    //&(!(_REG32(i2c_config[dev].addr, I2C_CONTROL) & I2C_CONTROL_BFREE))
+     {
         if (++timeout_counter >= max_timeout_counter) {
             DEBUG("[i2c] transfer timeout\n");
             return -ETIMEDOUT;
@@ -203,16 +217,17 @@ static inline int _wait_busy(i2c_t dev, uint32_t max_timeout_counter)
     return 0;
 }
 
-static inline int _start(i2c_t dev, uint16_t slv_address_rw)
+static inline int _start(i2c_t dev, uint16_t address) 
+//address - slave addr. with read 1 or write 0
 {
     _wait_busy(dev, I2C_BUSY_TIMEOUT);
 
     /* start transmission */
-    DEBUG("[i2c] write slave address, 0x%02X\n", slv_address_rw);
-    _REG32(i2c_config[dev].addr, I2C_DATA) = slv_address_rw;
+    DEBUG("[i2c] write slave address, 0x%02X\n", address);
+    _REG32(i2c_config[dev].addr, I2C_DATA) = address;
 
     DEBUG("[i2c] send start condition\n");
-    _REG32(i2c_config[dev].addr, I2C_CONTROL) = (I2C_CONTROL_START);
+    _REG32(i2c_config[dev].addr, I2C_CONTROL) &= 0b11100000;//I2C_CONTROL_START
 
     /* Ensure all bytes has been read */
     int ret = _wait_busy(dev, I2C_BUSY_TIMEOUT);
@@ -240,7 +255,8 @@ static inline int _read(i2c_t dev, uint8_t *data, int length, uint8_t stop)
 
         /* Read dummy byte to enter ST_READ state in FSM */
         /* iobus_wr = '0' -> start_read_access <= '1' */
-        int dummy = (uint32_t)(_REG32(i2c_config[dev].addr, I2C_DATA));
+        uint32_t dummy = (uint32_t)(_REG32(i2c_config[dev].addr, I2C_DATA));
+        DEBUG("[i2c] read dummy byte #%i, 0x%02lX\n", count, dummy);
         /* Wait for response on bus. */
         ret = _wait_busy(dev, I2C_BUSY_TIMEOUT);
         if (ret < 0) {
