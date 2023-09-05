@@ -31,9 +31,15 @@
 
 
 /* Register offsets */
-#define I2C_CONTROL			(0x4)
-#define I2C_DATA			(0x8)
-#define I2C_TIMER			(0xC)
+#define I2C_CONTROL			    (0x4)
+#define I2C_DATA		  	    (0x8)
+#define I2C_TIMER		      	(0xC)
+
+/*set I2C_TIMER register*/
+
+#define I2C_TIMER_0           0
+#define I2C_TIMER_5           5
+#define I2C_TIMER_99          99
 
 /* CONTROL register */
 /* I2C_CONTROL 8bit
@@ -46,13 +52,16 @@
   -- bit 1 (r)  : BFREE  bus free (there was a STOP)
   -- bit 0 (r)  : ACK    Ack of last transfer
 */
-#define I2C_CONTROL_I2CIE			(1 << 7) //(0b10000000)
-#define I2C_CONTROL_I2CE			(1 << 6) //(0b01000000)
-#define I2C_CONTROL_START			(1 << 5) //(0b00100000)
-#define I2C_CONTROL_STOP			(1 << 4) //(0b00010000)
+//force init
+#define I2C_CONTROL_START_STOP     0b11110000 
 
-#define I2C_CONTROL_DONE			(1 << 2) //(0b00000100)
-#define I2C_CONTROL_BFREE			(1 << 1) //(0b00000010)
+//control bits
+#define I2C_CONTROL_I2CIE			  (1 << 7) //(0b10000000)
+#define I2C_CONTROL_I2CE			  (1 << 6) //(0b01000000)
+#define I2C_CONTROL_START			  (1 << 5) //(0b00100000)
+#define I2C_CONTROL_STOP			  (1 << 4) //(0b00010000)
+#define I2C_CONTROL_DONE			  (1 << 2) //(0b00000100)
+#define I2C_CONTROL_BFREE			  (1 << 1) //(0b00000010)
 #define I2C_CONTROL_ACK			    (1 << 0) //(0b00000001)
 
 
