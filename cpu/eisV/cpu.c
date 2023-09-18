@@ -21,6 +21,8 @@
 #include "periph/init.h"
 
 #include "stdio_uart.h"
+// #include "ztimer.h"
+
 
 /**
  * @brief Initialize the CPU, set IRQ priorities, clocks, peripheral
@@ -35,4 +37,7 @@ void cpu_init(void)
 
     /* Initialize static peripheral */
     periph_init();
+
+    //Initialize ztimer
+    // ztimer_init();
 }
