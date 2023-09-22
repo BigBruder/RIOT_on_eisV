@@ -106,6 +106,15 @@ static inline uint8_t _crc8(const void* buf, size_t len)
     return crc8(buf, len, 0x31, 0xff);
 }
 
+//set wait function to replace ztimer
+static inline void wait_n_ms(uint32_t n)
+{
+     // 50MHZ ~ roughly 50000 cycles ~ 1 ms; 12500 ~ 250us
+    volatile uint32_t b=n*50000;
+    while(b--){};
+}
+
+
 /* ------------------------------------------------ */
 
 int sht3x_init (sht3x_dev_t *dev, const sht3x_params_t *params)
@@ -181,6 +190,7 @@ static int _start_measurement (sht3x_dev_t* dev)
     if (dev->mode != SHT3X_SINGLE_SHOT) {
         /* sensor needs up to 250 us to process the measurement command */
         // ztimer_sleep(ZTIMER_MSEC, 1);
+        wait_n_ms(1);
 
         uint16_t status;
         int res;
@@ -220,6 +230,7 @@ static int _get_raw_data(sht3x_dev_t* dev, uint8_t* raw_data)
     //     /* if necessary, wait until the measurement results become available */
     //     ztimer_sleep(ZTIMER_MSEC, dev->meas_duration - elapsed);
     // }
+    wait_n_ms(20);//set 20ms(not sure) delay
 
     /* send fetch command in any periodic mode (mode > 0) before read raw data */
     if (dev->mode != SHT3X_SINGLE_SHOT &&
@@ -341,6 +352,7 @@ static int _reset (sht3x_dev_t* dev)
      */
     _send_command(dev, SHT3X_CMD_BREAK);
     // ztimer_sleep(ZTIMER_MSEC, 1);
+    wait_n_ms(1);
 
     /* send the soft-reset command */
     if (_send_command(dev, SHT3X_CMD_RESET) != SHT3X_OK) {
@@ -350,6 +362,7 @@ static int _reset (sht3x_dev_t* dev)
 
     /* wait for 2 ms, the time needed to restart (according to datasheet 0.5 ms) */
     // ztimer_sleep(ZTIMER_MSEC, 2);
+    wait_n_ms(2);//2ms
 
     /* send reset command */
     if (_send_command(dev, SHT3X_CMD_CLEAR_STATUS) != SHT3X_OK) {
@@ -359,6 +372,7 @@ static int _reset (sht3x_dev_t* dev)
 
     /* sensor needs some time to process the command */
     // ztimer_sleep(ZTIMER_MSEC, 1);
+    wait_n_ms(1);//1ms
 
     uint16_t status;
     int res = SHT3X_OK;

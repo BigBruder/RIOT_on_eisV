@@ -34,7 +34,7 @@
 #include "vendor/platform.h"
 //#include "vendor/prci_driver.h"
 
-#define ENABLE_DEBUG 0
+#define ENABLE_DEBUG 1
 #include "debug.h"
 
 #define I2C_BUSY_TIMEOUT    (0xffff)
@@ -80,7 +80,7 @@ void i2c_init(i2c_t dev)
     //init_stop 0b11110000 = 0xD0
     _REG32(i2c_config[dev].addr, I2C_CONTROL) = I2C_CONTROL_START_STOP;
     // random data, no slave addr.
-    _REG32(i2c_config[dev].addr, I2C_DATA) = 0b00101000; 
+    _REG32(i2c_config[dev].addr, I2C_DATA) = 0b00101000; //random data
     //---------------------------------------------------------
 
     int ret=0;
@@ -213,7 +213,6 @@ static inline int _wait_busy(i2c_t dev, uint32_t max_timeout_counter)
         if (++timeout_counter >= max_timeout_counter) {
             DEBUG("_[i2c] error: transfer timeout\n");
             return -ETIMEDOUT;
-            //if(ENABLE_DEBUG == 1)  break;
         }
 
     }
@@ -267,8 +266,8 @@ static inline int _read(i2c_t dev, uint8_t *data, int length, uint8_t stop)
         DEBUG_crl_reg(dev);
         if((length == 0) && stop){
             DEBUG("STOP read, last byte\n");
-            //_REG32(i2c_config[dev].addr, I2C_CONTROL) |= I2C_CONTROL_STOP;
-            _REG32(i2c_config[dev].addr, I2C_CONTROL) = 0b11010000;
+            _REG32(i2c_config[dev].addr, I2C_CONTROL) |= I2C_CONTROL_STOP;
+            //_REG32(i2c_config[dev].addr, I2C_CONTROL) = 0b11010000;
         }
         DEBUG_crl_reg(dev);
 
@@ -308,9 +307,9 @@ static inline int _write(i2c_t dev, const uint8_t *data, int length,
         DEBUG_crl_reg(dev);
         if ((length == 0) && stop) {
             //STOP condition
-            //_REG32(i2c_config[dev].addr, I2C_CONTROL) |= I2C_CONTROL_STOP;
+            _REG32(i2c_config[dev].addr, I2C_CONTROL) |= I2C_CONTROL_STOP;
             //_REG32(i2c_config[dev].addr, I2C_CONTROL) = 0b11010000;
-            DEBUG("_[i2c] STOP write ");
+            DEBUG("_[i2c] STOP write \n");
         }
 
         DEBUG_crl_reg(dev);
