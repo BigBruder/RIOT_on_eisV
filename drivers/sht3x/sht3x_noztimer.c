@@ -111,7 +111,7 @@ static inline void wait_n_ms(uint32_t n)
 {
      // 50MHZ ~ roughly 50000 cycles ~ 1 ms; 12500 ~ 250us
     volatile uint32_t b=n*50000;
-    while(b--){};
+    while(b--);
 }
 
 
@@ -364,7 +364,7 @@ static int _reset (sht3x_dev_t* dev)
     // ztimer_sleep(ZTIMER_MSEC, 2);
     wait_n_ms(2);//2ms
 
-    /* send reset command */
+    /* send Clear Status Register command */
     if (_send_command(dev, SHT3X_CMD_CLEAR_STATUS) != SHT3X_OK) {
         DEBUG_DEV("reset failed, could not send SHT3X_CMD_CLEAR_STATUS", dev);
         return -SHT3X_ERROR_I2C;
