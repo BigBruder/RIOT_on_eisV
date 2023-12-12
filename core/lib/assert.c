@@ -18,6 +18,7 @@
 #include "assert.h"
 #include "architecture.h"
 #include "cpu_common.h"
+//#include "cpu.h"
 #include "panic.h"
 #if IS_USED(MODULE_BACKTRACE)
 #include "backtrace.h"

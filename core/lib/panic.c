@@ -23,6 +23,7 @@
 
 #include "kernel_defines.h"
 #include "cpu_common.h"
+//#include "cpu.h"
 #include "irq.h"
 #include "panic.h"
 #include "periph/pm.h"
