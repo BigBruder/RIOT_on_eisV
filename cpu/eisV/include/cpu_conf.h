@@ -26,8 +26,8 @@ extern "C" {
 #endif
 
 // Helper functions
-#define _REG32(p, i) 			(*(volatile uint32_t *) ((p) + (i)))
-#define _REG32P(p, i) 			((volatile uint32_t *) ((p) + (i)))
+//#define _REG32(p, i) 			(*(volatile uint32_t *) ((p) + (i)))
+//#define _REG32P(p, i) 			((volatile uint32_t *) ((p) + (i)))
 
 /**
  * @brief Base address of the CLINT

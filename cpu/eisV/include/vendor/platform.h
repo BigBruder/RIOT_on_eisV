@@ -1,8 +1,7 @@
 // See LICENSE for license details.
 
-#ifndef _SIFIVE_PLATFORM_H
-#define _SIFIVE_PLATFORM_H
-
+#ifndef _EISV_PLATFORM_H
+#define _EISV_PLATFORM_H
 
 
 //#include "vendor/aon.h"
@@ -15,6 +14,7 @@
 //#include "vendor/pwm.h"
 //#include "vendor/spi.h"
 //#include "vendor/uart.h"
+//#include "vendor/nano_eisv.h"
 
 
 /****************************************************************************
@@ -32,13 +32,14 @@
 #define PRCI_CTRL_ADDR 			(0x10008000)
 #define OTP_CTRL_ADDR 			(0x10010000)
 #define GPIO_CTRL_ADDR 			(0x10012000)
-#define UART0_CTRL_ADDR 		(0x10013000)
 #define SPI0_CTRL_ADDR 			(0x10014000)
 #define PWM0_CTRL_ADDR 			(0x10015000)
-//----------------------
-#define I2C0_CTRL_ADDR 			(0xffffffd0) //adapted to eisv i2c_master
+//----------------------for EISV
+#define I2C0_CTRL_ADDR          (0xFFFFFFD0) //adapted to eisv i2c_master
+#define NANO_CTRL_ADDR          (0xFFFFFFE0) //adapted to NanoController
+#define UART0_CTRL_ADDR 		(0xFFFFFFB0) //UART has been defined in syscall.c
 //---------------------------
-#define UART1_CTRL_ADDR 		(0x10023000)
+#define UART1_CTRL_ADDR 		(0xFFFFFFB0) 
 #define SPI1_CTRL_ADDR 			(0x10024000)
 #define PWM1_CTRL_ADDR 			(0x10025000)
 #define SPI2_CTRL_ADDR 			(0x10034000)
@@ -106,12 +107,14 @@
 // Helper functions
 #define _REG32(p, i) 			(*(volatile uint32_t *) ((p) + (i)))
 #define _REG32P(p, i) 			((volatile uint32_t *) ((p) + (i)))
+//--------
+#define I2C0_REG(offset) 		_REG32(I2C0_CTRL_ADDR, offset)
+#define NANO_REG(offset) 		_REG32(NANO_CTRL_ADDR, offset)
+#define UART0_REG(offset) 		_REG32(UART0_CTRL_ADDR, offset)
+//---------
 #define AON_REG(offset) 		_REG32(AON_CTRL_ADDR, offset)
 #define CLINT_REG(offset) 		_REG32(CLINT_CTRL_ADDR, offset)
 #define GPIO_REG(offset) 		_REG32(GPIO_CTRL_ADDR, offset)
-//--------
-#define I2C0_REG(offset) 		_REG32(I2C0_CTRL_ADDR, offset)
-//---------
 #define OTP_REG(offset)  		_REG32(OTP_CTRL_ADDR, offset)
 #define PLIC_REG(offset) 		_REG32(PLIC_CTRL_ADDR, offset)
 #define PRCI_REG(offset) 		_REG32(PRCI_CTRL_ADDR, offset)
@@ -121,7 +124,6 @@
 #define SPI0_REG(offset) 		_REG32(SPI0_CTRL_ADDR, offset)
 #define SPI1_REG(offset) 		_REG32(SPI1_CTRL_ADDR, offset)
 #define SPI2_REG(offset) 		_REG32(SPI2_CTRL_ADDR, offset)
-#define UART0_REG(offset) 		_REG32(UART0_CTRL_ADDR, offset)
 #define UART1_REG(offset) 		_REG32(UART1_CTRL_ADDR, offset)
 
 // Misc
@@ -135,4 +137,4 @@
 
 #define ITIM_MEM_LEN		8192
 
-#endif /* _SIFIVE_PLATFORM_H */
+#endif /* _EISV_PLATFORM_H */

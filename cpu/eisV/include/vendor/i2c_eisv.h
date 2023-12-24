@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Inria
+ * Copyright (C) 2023 Jingwei Li
  *
  * This file is subject to the terms and conditions of the GNU Lesser General
  * Public License v2.1. See the file LICENSE in the top level directory for more
@@ -12,7 +12,7 @@
  * @{
  *
  * @file        i2c_eisv.h
- * @brief       Low-level I2C driver implementation
+ * @brief       Low-level I2C driver implementation headfile
  *
  * @author      Jingwei Li <jingwei.li@tu-braunschweig.de>
  *
@@ -21,14 +21,6 @@
 
 #ifndef _EISV_I2C_H
 #define _EISV_I2C_H
-
-/* I2C memory map */
-// #define I2C0_CTRL_ADDR 			(0xFFFFFFD0) //adapted to eisv i2c_master
-
-// Helper functions
-// #define _REG32(p, i) 			(*(volatile uint32_t *) ((p) + (i)))
-//#define I2C0_REG(offset) 		_REG32(I2C0_CTRL_ADDR, offset)
-
 
 /* Register offsets */
 #define I2C_CONTROL			    (0x4)
@@ -56,16 +48,13 @@
 #define I2C_CONTROL_START_STOP     0b11110000 
 
 //control bits
-#define I2C_CONTROL_I2CIE			  (1 << 7) //(0b10000000)
-#define I2C_CONTROL_I2CE			  (1 << 6) //(0b01000000)
-#define I2C_CONTROL_START			  (1 << 5) //(0b00100000)
-#define I2C_CONTROL_STOP			  (1 << 4) //(0b00010000)
-#define I2C_CONTROL_DONE			  (1 << 2) //(0b00000100)
-#define I2C_CONTROL_BFREE			  (1 << 1) //(0b00000010)
-#define I2C_CONTROL_ACK			    (1 << 0) //(0b00000001)
-
-
-
+#define I2C_CONTROL_I2CIE           (1 << 7) //(0b10000000)
+#define I2C_CONTROL_I2CE            (1 << 6) //(0b01000000)
+#define I2C_CONTROL_START           (1 << 5) //(0b00100000)
+#define I2C_CONTROL_STOP            (1 << 4) //(0b00010000)
+#define I2C_CONTROL_DONE            (1 << 2) //(0b00000100)
+#define I2C_CONTROL_BFREE           (1 << 1) //(0b00000010)
+#define I2C_CONTROL_ACK             (1 << 0) //(0b00000001)
 
 
 #endif /* _EISV_I2C_H */
