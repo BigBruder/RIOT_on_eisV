@@ -50,6 +50,14 @@ extern "C" {
                         }
 #endif
 
+#ifndef SHT3X_PARAMS_EISV
+#define SHT3X_PARAMS_EISV       { .i2c_dev  = SHT3X_PARAM_I2C_DEV,  \
+                                  .i2c_addr = SHT3X_I2C_ADDR_1, \
+                                  .mode     = SHT3X_SINGLE_SHOT, \
+                                  .repeat   = SHT3X_MEDIUM    \
+                                }
+#endif
+
 #ifndef SHT3X_SAUL_INFO
 #define SHT3X_SAUL_INFO { .name = "sht3x1" }
 #endif
@@ -60,7 +68,8 @@ extern "C" {
  */
 static const sht3x_params_t sht3x_params[] =
 {
-    SHT3X_PARAMS
+    SHT3X_PARAMS,
+    SHT3X_PARAMS_EISV
 };
 
 /**
