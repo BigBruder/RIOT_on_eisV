@@ -3,6 +3,7 @@ CPU_CORE := rv32im
 FEATURES_PROVIDED += periph_cpuid
 FEATURES_PROVIDED += periph_plic
 FEATURES_PROVIDED += periph_pm
+FEATURES_PROVIDED += periph_nano
 
 #include $(RIOTCPU)/riscv_common/Makefile.features
 ##########################################################

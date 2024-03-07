@@ -1,6 +1,7 @@
 #USEMODULE += periph
 
 FEATURES_REQUIRED += periph_plic
+#FEATURES_REQUIRED += periph_nano
 
 ifneq (,$(filter periph_rtc,$(USEMODULE)))
   FEATURES_REQUIRED += periph_rtt
