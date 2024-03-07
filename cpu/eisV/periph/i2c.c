@@ -118,22 +118,24 @@ int i2c_read_bytes(i2c_t dev, uint16_t address, void *data, size_t length,
         }
     }
     
-    /* Read dummy byte to enter ST_READ state in hardware FSM */
+    /* Read dummy byte to enter ST_READ state in hardware FSM, 
+    which is like to open a channel for the first Byte transmission */
     /* iobus_wr = '0' -> start_read_access <= '1' */
     uint32_t dummy = (uint32_t)(_REG32(i2c_config[dev].addr, I2C_DATA));
     DEBUG("_[i2c] read dummy byte , 0x%02lX\n", dummy);
 
-    /* Wait for response on bus. */
+    /*consider the situation: only one Byte to receive*/
+    if((length == 1) && ((flags & I2C_NOSTOP) ? 0 : 1)){
+        DEBUG("STOP read, last byte\n");
+        _REG32(i2c_config[dev].addr, I2C_CONTROL) |= I2C_CONTROL_STOP;
+    }
+
+    /* Waiting for the first Byte data transmission */
     ret = _wait_busy(dev, I2C_BUSY_TIMEOUT);
     if (ret < 0) {
             DEBUG("_[i2c] return ret = %d\n", ret);
             return ret;
     } 
- 
-    if((length == 1) && ((flags & I2C_NOSTOP) ? 0 : 1)){
-        DEBUG("STOP read, last byte\n");
-        _REG32(i2c_config[dev].addr, I2C_CONTROL) |= I2C_CONTROL_STOP;
-    }
 
     /* read data and issue STOP if needed */
     ret = _read(dev, data, length, (flags & I2C_NOSTOP) ? 0 : 1);
@@ -189,6 +191,7 @@ static inline int _wait_busy(i2c_t dev, uint32_t max_timeout_counter)
 {
     uint32_t timeout_counter = 0;
 
+    /*Checking control-reg DONE bit*/
     while (!(_REG32(i2c_config[dev].addr, I2C_CONTROL) & I2C_CONTROL_DONE))
      {
         if (++timeout_counter >= max_timeout_counter) {
@@ -207,7 +210,7 @@ static inline int _start(i2c_t dev, uint16_t address)
 
     _wait_busy(dev, I2C_BUSY_TIMEOUT);
 
-    /* start transmission */
+    /* start transmission: enable START condition by 11100000 */
     DEBUG("_[i2c] [send] start condition\n");
     _REG32(i2c_config[dev].addr, I2C_CONTROL) |= I2C_CONTROL_START;
 
@@ -239,15 +242,16 @@ static inline int _read(i2c_t dev, uint8_t *data, int length, uint8_t stop)
             return ret;
         } 
 
+        /*Read a real data from DATA-reg. and open channel for the next one*/
+        data[count] = (uint32_t)(_REG32(i2c_config[dev].addr, I2C_DATA));
+        DEBUG("_[i2c] read byte #%i, 0x%02X\n", count, data[count]);
+
+        /*Send STOP condition, before transmission of the last byte*/
         if((length == 1) && stop){
             DEBUG("STOP read, last byte\n");
             _REG32(i2c_config[dev].addr, I2C_CONTROL) |= I2C_CONTROL_STOP;
         }
-
-        data[count] = (uint32_t)(_REG32(i2c_config[dev].addr, I2C_DATA));
-        DEBUG("_[i2c] read byte #%i, 0x%02X\n", count, data[count]);
-
-        /* Wait for response on bus. */
+        /* Wait for the next data byte transmission */
         ret = _wait_busy(dev, I2C_BUSY_TIMEOUT);
          if (ret < 0) {
             DEBUG("_[i2c] return ret = %d\n", ret);
@@ -273,15 +277,17 @@ static inline int _write(i2c_t dev, const uint8_t *data, int length,
             return ret;
         } 
 
-        DEBUG("_[i2c] write byte #%i, 0x%02X\n", count, data[count]);
-        _REG32(i2c_config[dev].addr, I2C_DATA) = data[count++];
-        
+        /*Send STOP condition, before transmission of the last byte*/
         if ((length == 0) && stop) {
             //STOP condition
             _REG32(i2c_config[dev].addr, I2C_CONTROL) |= I2C_CONTROL_STOP;
             DEBUG("_[i2c] STOP write \n");
         }
 
+        DEBUG("_[i2c] write byte #%i, 0x%02X\n", count, data[count]);
+        _REG32(i2c_config[dev].addr, I2C_DATA) = data[count++];
+        
+        /*Wait for writing done*/
         ret = _wait_busy(dev, I2C_BUSY_TIMEOUT);
         if (ret < 0) {
             DEBUG("_[i2c] return ret = %d\n", ret);
