@@ -36,7 +36,7 @@
 #define PWM0_CTRL_ADDR 			(0x10015000)
 //----------------------for EISV
 #define I2C0_CTRL_ADDR          (0xFFFFFFD0) //adapted to eisv i2c_master
-#define NANO_CTRL_ADDR          (0xFFFFFFE0) //adapted to NanoController
+#define NANO_CTRL_ADDR          (0xFFFFFFF0) //adapted to NanoController
 #define UART0_CTRL_ADDR 		(0xFFFFFFB0) //UART has been defined in syscall.c
 //---------------------------
 #define UART1_CTRL_ADDR 		(0xFFFFFFB0) 
